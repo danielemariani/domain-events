@@ -1,0 +1,16 @@
+{
+  "name": "domain-events",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jest --watchAll ./src"
+  },
+  "author": "Daniele Mariani",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^19.0.2"
+  },
+  "dependencies": {
+  }
+}
