@@ -51,8 +51,19 @@ describe('DomainEvent', () => {
     });
   });
 
-  describe('when requested to serialize itself', () => {
+  describe('when handled', () => {
+    it('should be immutable', () => {
+      let event = new DomainEvent('NAME', { a: 'a' });
+      let payload = event.payload();
 
+      payload.a = 13;
+      payload.b = 56;
+
+      expect(event.payload()).toEqual({ a: 'a' });
+    });
+  });
+
+  describe('when requested to serialize itself', () => {
     beforeEach(() => {
       Date.prototype.getTime
         .mockReturnValue(100);
@@ -68,6 +79,25 @@ describe('DomainEvent', () => {
           payload: { a: 'a' },
           createdAt: 100
         }));
+    });
+  });
+
+  describe('when required to deserialize a event JSON', () => {
+    it('should restore the original event', () => {
+      Date.prototype.getTime
+        .mockReturnValue(100);
+
+      let event = new DomainEvent('NAME', { a: 'a' });
+      let serializedEvent = event.serialize();
+
+      Date.prototype.getTime
+        .mockReturnValue(200);
+
+      let deserializedEvent = DomainEvent.deserialize(serializedEvent);
+
+      expect(event.name()).toEqual(deserializedEvent.name());
+      expect(event.payload()).toEqual(deserializedEvent.payload());
+      expect(event.createdAt()).toEqual(deserializedEvent.createdAt());
     });
   });
 });

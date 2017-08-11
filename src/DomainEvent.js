@@ -1,29 +1,52 @@
 
 class DomainEvent {
 
-  constructor(aEventName, aEventPayload) {
-    this.eventName = validateEventName(aEventName);
-    this.eventPayload = parseEventPayload(aEventPayload);
-    this.creationTimestamp = calculateCurrentTimestamp();
+  static deserialize(aSerializedEvent) {
+    let deserializedEventObject = JSON.parse(aSerializedEvent);
+
+    return new DomainEvent(
+      deserializedEventObject.name,
+      deserializedEventObject.payload,
+      deserializedEventObject.createdAt
+    );
   }
 
-  name() {
-    return this.eventName;
-  }
+  constructor(
+    aEventName,
+    aEventPayload,
+    aEventCreationTimestamp = null
+  ) {
 
-  payload() {
-    return this.eventPayload;
-  }
+    let that = this;
+    let eventName = validateEventName(aEventName);
+    let eventPayload = parseEventPayload(aEventPayload);
+    let creationTimestamp = calculateCurrentTimestamp(aEventCreationTimestamp);
 
-  createdAt() {
-    return this.creationTimestamp;
-  }
+    function name() {
+      return eventName;
+    }
 
-  serialize() {
-    return JSON.stringify({
-      name: this.name(),
-      payload: this.payload(),
-      createdAt: this.createdAt()
+    function payload() {
+      return cloneValue(eventPayload);
+    }
+
+    function createdAt() {
+      return creationTimestamp;
+    }
+
+    function serialize() {
+      return JSON.stringify({
+        name: that.name(),
+        payload: that.payload(),
+        createdAt: that.createdAt()
+      });
+    }
+
+    return Object.assign(this, {
+      name,
+      payload,
+      createdAt,
+      serialize
     });
   }
 }
@@ -40,8 +63,16 @@ function parseEventPayload(aEventPayload) {
   return aEventPayload || null;
 }
 
-function calculateCurrentTimestamp() {
+function calculateCurrentTimestamp(aTimestamp) {
+  if (aTimestamp) {
+    return aTimestamp;
+  }
+
   return (new Date()).getTime();
+}
+
+function cloneValue(aValue) {
+  return JSON.parse(JSON.stringify(aValue));
 }
 
 module.exports = DomainEvent;
