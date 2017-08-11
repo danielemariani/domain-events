@@ -80,13 +80,13 @@ eventBus.register(aEventHandler, 'event.name'); // Only events with name 'event.
 ##### aEventName (optional)
 A string which is the name of the handled event. Omit the parameter to register the handler to any event (ex. for logging or persisting the events in a database).
 
-### .dispatch(aDomainEvent)
+#### .dispatch(aDomainEvent)
 Pass a DomainEvent to the dispatch method to execute the registered handler asyncronously.
 
-### aDomainEvent
+##### aDomainEvent
 A DomainEvent instance.
 
-### Events Immutability
+#### Events Immutability
 Every handler will be invoked asyncronously and will be provided the original DomainEvent object, which is immutable.
 For example, mutating the payload in a Handler will not affect the original event and those modifications won't be provided to the next registered Handler.
 
