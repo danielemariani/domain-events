@@ -1,4 +1,4 @@
-# Domain Events
+# Domain Events [![Build Status](https://travis-ci.org/danielemariani/domain-events.svg?branch=master)](https://travis-ci.org/danielemariani/domain-events) [![npm version](https://img.shields.io/npm/v/domain-events.svg)](https://www.npmjs.com/package/react)
 
 [domain-events](https://github.com/danielemariani/domain-events) is a js library to create and asyncronously dispatch Domain Events.
 
