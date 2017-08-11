@@ -5,7 +5,7 @@
   "main": "src",
   "scripts": {
     "test": "./node_modules/.bin/jest --watchAll ./src",
-    "test-travis": "./node_modules/.bin/jest ./src"
+    "test-travis": "./node_modules/.bin/jest --coverage ./src"
   },
   "author": "Daniele Mariani",
   "license": "ISC",

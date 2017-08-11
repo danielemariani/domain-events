@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1502456198770" clover="3.2.0">
+  <project timestamp="1502456198770" name="All files">
+    <metrics statements="56" coveredstatements="56" conditionals="27" coveredconditionals="27" methods="30" coveredmethods="30" elements="113" coveredelements="113" complexity="0" loc="56" ncloc="56" packages="1" files="2" classes="2">
+      <file name="DomainEvent.js" path="/Users/dmariani/Others/domain-events/src/DomainEvent.js">
+        <metrics statements="20" coveredstatements="20" conditionals="7" coveredconditionals="7" methods="10" coveredmethods="10"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="20" count="18" type="stmt"/>
+        <line num="21" count="18" type="stmt"/>
+        <line num="22" count="17" type="stmt"/>
+        <line num="23" count="17" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="45" count="17" type="stmt"/>
+        <line num="55" count="18" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="59" count="17" type="stmt"/>
+        <line num="63" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="67" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="71" count="16" type="stmt"/>
+        <line num="75" count="8" type="stmt"/>
+        <line num="78" count="2" type="stmt"/>
+      </file>
+      <file name="EventBus.js" path="/Users/dmariani/Others/domain-events/src/EventBus.js">
+        <metrics statements="36" coveredstatements="36" conditionals="20" coveredconditionals="20" methods="20" coveredmethods="20"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="7" count="14" type="stmt"/>
+        <line num="8" count="14" type="stmt"/>
+        <line num="12" count="17" type="stmt"/>
+        <line num="13" count="16" type="stmt"/>
+        <line num="15" count="14" type="stmt"/>
+        <line num="20" count="7" type="stmt"/>
+        <line num="22" count="6" type="stmt"/>
+        <line num="30" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="36" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="45" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="54" count="24" type="stmt"/>
+        <line num="61" count="15" type="stmt"/>
+        <line num="65" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="66" count="12" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="75" count="12" type="stmt"/>
+        <line num="81" count="2" type="stmt"/>
+        <line num="86" count="18" type="cond" truecount="2" falsecount="0"/>
+        <line num="87" count="11" type="stmt"/>
+        <line num="90" count="18" type="stmt"/>
+        <line num="94" count="6" type="stmt"/>
+        <line num="99" count="8" type="stmt"/>
+        <line num="108" count="6" type="stmt"/>
+        <line num="113" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="114" count="5" type="stmt"/>
+        <line num="117" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="118" count="3" type="stmt"/>
+        <line num="123" count="8" type="stmt"/>
+        <line num="124" count="8" type="stmt"/>
+        <line num="125" count="8" type="stmt"/>
+        <line num="135" count="8" type="stmt"/>
+        <line num="141" count="1" type="stmt"/>
+      </file>
+    </metrics>
+  </project>
+</coverage>
