@@ -48,3 +48,34 @@ console.log('Other syncrounous code...');
 // --> "[[user.created]] user id: 12"
 // --> "[[ANY]] action.happened"
 ```
+
+### EventBus
+
+A EventBus instance lets you register handlers for a Event and dispatch Events to the handlers.
+Create a new EventBus with its constructor:
+
+```js
+let eventBus = new EventBus();
+```
+
+#### .register(aEventHandler, /*\*optional\**/ aEventName)
+
+##### aEventHandler
+The registered handler could be either:
+- a plain function accepting the dispatched event as the only argument
+- a object instance with a handle method, which accepts the dispatched event as the only argument
+
+```js
+let handler = (aDispatchedEvent) => { ... };
+let anotherHander = { handle: (aDispatchedEvent) => { ... } };
+```
+
+The handler could be registered to a specific event (providing the event name) or to any event (ommitting the *aEventName* parameter):
+
+```js
+eventBus.register(aEventHandler); // Every dispatched event will be dispatched provided to the handler
+eventBus.register(aEventHandler, 'event.name'); // Only events with name 'event.name' will be dispatched to the handler
+```
+
+##### aEventName (optional)
+A string which is the name of the handled event. Omit the parameter to register the handler to any event (ex. for logging or persisting the events in a database).
