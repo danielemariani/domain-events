@@ -24,19 +24,19 @@ let aEvent = new DomainEvent('user.created', { userId: '12' });
 let anotherEvent = new DomainEvent('action.happened', { actionId: 'ACTION' });
 
 // A event handler could be a simple function
-let globalEventsHandler = function(aDispatchedEvent) {
+let aFunctionHandler = function(aDispatchedEvent) {
   console.log(`[[ANY]] ${aDispatchedEvent.name()}`);
 }
 
 // A event handler could be a object with a "handle" method
-let singleEventHandler = {
+let aObjectHandler = {
   handle: (aDispatchedEvent) => {
     console.log(`[[user.created]] user id: ${aDispatchedEvent.payload().userId}`);
   }
 };
 
-eventBus.register(globalEventsHandler); // Handle every event
-eventBus.register(singleEventHandler, 'user.created'); // Handle only 'user.created' events
+eventBus.register(aGlobalEventsHandler); // Handle every event
+eventBus.register(aSingleEventHandler, 'user.created'); // Handle only 'user.created' events
 
 eventBus.dispatch(aEvent);
 eventBus.dispatch(anotherEvent);
@@ -73,9 +73,47 @@ let anotherHander = { handle: (aDispatchedEvent) => { ... } };
 The handler could be registered to a specific event (providing the event name) or to any event (ommitting the *aEventName* parameter):
 
 ```js
-eventBus.register(aEventHandler); // Every dispatched event will be dispatched provided to the handler
+eventBus.register(aEventHandler); // Every dispatched event will be dispatched to the handler
 eventBus.register(aEventHandler, 'event.name'); // Only events with name 'event.name' will be dispatched to the handler
 ```
 
 ##### aEventName (optional)
 A string which is the name of the handled event. Omit the parameter to register the handler to any event (ex. for logging or persisting the events in a database).
+
+### .dispatch(aDomainEvent)
+Pass a DomainEvent to the dispatch method to execute the registered handler asyncronously.
+
+### aDomainEvent
+A DomainEvent instance.
+
+### Events Immutability
+Every handler will be invoked asyncronously and will be provided the original DomainEvent object, which is immutable.
+For example, mutating the payload in a Handler will not affect the original event and those modifications won't be provided to the next registered Handler.
+
+```js
+let event = new DomainEvent('name', { a: 12 });
+
+let aHandler = function(aDispatchedEvent) {
+  let eventPayload = aDispatchedEvent.payload();
+  console.log(eventPayload)    
+  
+  eventPayload.a = 23;
+  console.log(eventPayload)    
+};
+
+let anotherHandler = function(aDispatchedEvent) {
+  console.log(aDispatchedEvent.payload());
+}
+
+eventBus.register(aHandler, 'name');
+eventBus.register(anotherHandler, 'name');
+
+eventBus.dispatch(event);
+
+// First handler
+// --> { a: 12 }
+// --> { a: 23 }
+
+// Second handler
+// --> { a: 12 }
+```
