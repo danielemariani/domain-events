@@ -44,7 +44,7 @@ eventBus.dispatch(anotherEvent);
 console.log('Other syncrounous code...');
 
 // --> "Other sincrounous code..."
-// --> "[[ANY]]: user.created"
-// --> "[[user.created]]: user id: 12"
-// --> "[[ANY]]: action.happened"
+// --> "[[ANY]] user.created"
+// --> "[[user.created]] user id: 12"
+// --> "[[ANY]] action.happened"
 ```
