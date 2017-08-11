@@ -49,9 +49,31 @@ console.log('Other syncrounous code...');
 // --> "[[ANY]] action.happened"
 ```
 
-### EventBus
+### DomainEvent
+Create domain events with the DomainEvent class.
 
-A EventBus instance lets you register handlers for a Event and dispatch Events to the handlers.
+#### constructor(aEventName, /*\*optional\**/ aEventPayload)
+```js
+let event = new DomainEvent('event.name');
+let event = new DomainEvent('event.name', { a: 12 });
+```
+
+##### aEventName
+A string which will be the name of the event (use the same string to register handlers for that event).
+
+##### aEventPayload (optional)
+Any serializable value which will be provided to the handlers as the payload of the event. Any value that can be serialized as a JSON string could be provided as the paylod and will have an expected behaviour.
+
+```js
+Valid values examples:
+- 'A string'
+- 12
+- { a: 23 }
+- null
+```
+
+### EventBus
+A EventBus instance lets you register handlers for an event and dispatch events to the registered handlers.
 Create a new EventBus with its constructor:
 
 ```js
@@ -59,6 +81,7 @@ let eventBus = new EventBus();
 ```
 
 #### .register(aEventHandler, /*\*optional\**/ aEventName)
+Pass a event handler to the register method to register actions to be executed any time a Event is dispatched.
 
 ##### aEventHandler
 The registered handler could be either:
