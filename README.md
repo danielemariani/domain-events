@@ -25,7 +25,7 @@ let anotherEvent = new DomainEvent('action.happened', { actionId: 'ACTION' });
 
 // A event handler could be a simple function
 let globalEventsHandler = function(aDispatchedEvent) {
-  console.log(`[[ANY]]: ${aDispatchedEvent.name()}`);
+  console.log(`[[ANY]] ${aDispatchedEvent.name()}`);
 }
 
 // A event handler could be a object with a "handle" method
