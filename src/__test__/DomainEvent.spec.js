@@ -22,7 +22,7 @@ describe('DomainEvent', () => {
         .toThrow(TypeError);
     });
 
-    it('should assign the provided event name to the error', () => {
+    it('should assign the provided event name to the instance', () => {
       let event = new DomainEvent('NAME');
       expect(event.name()).toBe('NAME');
     });
@@ -69,7 +69,7 @@ describe('DomainEvent', () => {
         .mockReturnValue(100);
     });
 
-    it('should return a serialized version of the event with all the event data', () => {
+    it('should return a serialized version of the event', () => {
       let event = new DomainEvent('NAME', { a: 'a' });
       let serializedEvent = event.serialize();
 
