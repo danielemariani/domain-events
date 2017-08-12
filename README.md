@@ -189,3 +189,42 @@ eventBus.dispatch(event);
 // Second handler
 // --> { a: 12 }
 ```
+
+## Extending DomainEvent
+The DomainEvent Class could be extended to easily create new events with the same event name, or the same fixed payload.
+Here is an example of a new DomainEvent Class with a fixed event name:
+
+```js
+// === UserCreatedEvent.js
+const DomainEvent = require('domain-events').DomainEvent;
+const EVENT_NAME = 'user.created';
+
+class UserCreatedEvent extends DomainEvent {
+
+  static eventName() {
+    return EVENT_NAME;
+  }
+  
+  constructor(aEventPayload) {
+    super(EVENT_NAME, aEventPayload);
+  }
+}
+
+// === SomewhereElse.js
+const UserCreatedEvent = require('./UserCreatedEvent');
+
+// ... some code ...
+
+let userCreatedEvent = new UserCreatedEvent({ id: 127 }); // No need to pass event name to the DomainEvent constructor
+eventBus.publish(userCreatedEvent);
+
+// === SomewhereElseAgain.js
+const UserCreatedEvent = require('./UserCreatedEvent');
+
+// ... some code ...
+
+eventBus.register(
+  () => { ... },
+  UserCreatedEvent.eventName()
+);
+```
