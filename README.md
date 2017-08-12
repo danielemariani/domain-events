@@ -13,7 +13,7 @@ $ npm install domain-events
 ### Usage
 
 ```js
-const domainEvents = require("domain-events");
+const domainEvents = require('domain-events');
 
 const EventBus = domainEvents.EventBus;
 const DomainEvent = domainEvents.DomainEvent;
@@ -62,17 +62,23 @@ let event = new DomainEvent('event.name', { a: 12 }, 1502530224425);
 ```
 
 ##### aEventName
-A string which will be the name of the event (use the same string to register handlers for that event).
+A String which will be the name of the event (use the same string to register handlers for that event).
+Usually, because a domain event represents something that happened in the past, is preferrable to name events with an action in the past tense. Because the event name is just a plain string any naming convention flavour is possible, according to your coding style.
+
+Examples:
+- 'user.created'
+- 'purchaseCompleted'
+- 'ACTION_HAPPENED'
 
 ##### aEventPayload (optional)
 Any serializable value which will be provided to the handlers as the payload of the event. Any value that can be serialized as a JSON string could be provided as the paylod and will have an expected behaviour.
 
 ```js
-Valid values examples:
-- 'A string'
-- 12
-- { a: 23 }
-- null
+// Valid values examples:
+'A string'
+12
+{ a: 23 }
+null
 ```
 
 ##### aEventCreationTimestamp (optional)
