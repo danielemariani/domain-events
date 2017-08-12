@@ -238,4 +238,21 @@ describe('EventBus', () => {
       });
     });
   });
+
+  describe('when required to return a single static instance of itself', () => {
+    it('should return a EventBus instance', () => {
+      let staticEventBusInstance = EventBus.getInstance();
+
+      expect(staticEventBusInstance)
+        .toBeInstanceOf(EventBus);
+    });
+
+    it('should return the same instance every next call', () => {
+      let staticEventBusSingleton = EventBus.getInstance();
+      let anotherStaticEventBus = EventBus.getInstance();
+
+      expect(anotherStaticEventBus)
+        .toBe(staticEventBusSingleton);
+    });
+  });
 });

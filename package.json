@@ -9,6 +9,10 @@
   },
   "author": "Daniele Mariani",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/expressjs/cookie-session.git"
+  },
   "devDependencies": {
     "coveralls": "^2.13.1",
     "jest": "^19.0.2"

@@ -1,16 +1,26 @@
 
 const DomainEvent = require('./DomainEvent');
 
+let singletonEventBusInstance = null;
+
 class EventBus {
 
+  static getInstance() {
+    if (!singletonEventBusInstance) {
+      singletonEventBusInstance = new EventBus();
+    }
+
+    return singletonEventBusInstance;
+  }
+
   constructor() {
-    this.registeredEvents = {};
+    this.eventsToHandlersMap = {};
     this.handlersForAnyEvent = [];
   }
 
   register(aEventHandler, aEventName) {
     validateEventName(aEventName);
-    validateHandler(aEventHandler);
+    validateEventHandler(aEventHandler);
 
     registerHandlerForEvent
       .call(this, aEventHandler, aEventName);
@@ -26,12 +36,6 @@ class EventBus {
   }
 }
 
-function validateEvent(aEvent) {
-  if (!(aEvent instanceof DomainEvent)) {
-    throw new TypeError('EventBus can dispatch only instances of DomainEvent');
-  }
-}
-
 function validateEventName(aEventName) {
   if (
     typeof aEventName !== 'string' &&
@@ -41,7 +45,7 @@ function validateEventName(aEventName) {
   }
 }
 
-function validateHandler(aEventHandler) {
+function validateEventHandler(aEventHandler) {
   if (
     !isAnObjectHandler(aEventHandler) &&
     !isAFunctionHandler(aEventHandler)
@@ -61,6 +65,12 @@ function isAFunctionHandler(aEventHandler) {
   return typeof aEventHandler === 'function';
 }
 
+function validateEvent(aEvent) {
+  if (!(aEvent instanceof DomainEvent)) {
+    throw new TypeError('EventBus can dispatch only instances of DomainEvent');
+  }
+}
+
 function registerHandlerForEvent(aEventHandler, aEventName) {
   if (aEventName) {
     registerHandlerForSpecificEvent
@@ -72,9 +82,17 @@ function registerHandlerForEvent(aEventHandler, aEventName) {
 }
 
 function registerHandlerForSpecificEvent(aEventHandler, aEventName) {
-  listHandlersForEvent
+  listHandlersForSpecificEvent
     .call(this, aEventName)
     .push(aEventHandler);
+}
+
+function listHandlersForSpecificEvent(aEventName) {
+  if (!this.eventsToHandlersMap[aEventName]) {
+    this.eventsToHandlersMap[aEventName] = [];
+  }
+
+  return this.eventsToHandlersMap[aEventName];
 }
 
 function registerHandlerForAnyEvent(aEventHandler) {
@@ -82,20 +100,12 @@ function registerHandlerForAnyEvent(aEventHandler) {
     .push(aEventHandler);
 }
 
-function listHandlersForEvent(aEventName) {
-  if (!this.registeredEvents[aEventName]) {
-    this.registeredEvents[aEventName] = [];
-  }
-
-  return this.registeredEvents[aEventName];
-}
-
 function dispatchEventToRegisteredHandlers(aEvent) {
   return listAllHandlersForEvent
     .call(this, aEvent.name())
-    .map(mapHandlerToExecution);
+    .map(mapHandlerToItsDeferredExecution);
 
-  function mapHandlerToExecution(aEventHandler) {
+  function mapHandlerToItsDeferredExecution(aEventHandler) {
     return deferredExecutionOf(
       dispatchEventToHandler,
       this,
@@ -106,17 +116,10 @@ function dispatchEventToRegisteredHandlers(aEvent) {
 
 function listAllHandlersForEvent(aEventName) {
   return this.handlersForAnyEvent
-    .concat(listHandlersForEvent.call(this, aEventName));
-}
-
-function dispatchEventToHandler(aEvent, aEventHandler) {
-  if (isAnObjectHandler(aEventHandler)) {
-    aEventHandler.handle(aEvent);
-  }
-
-  if (isAFunctionHandler(aEventHandler)) {
-    aEventHandler(aEvent);
-  }
+    .concat(
+      listHandlersForSpecificEvent
+        .call(this, aEventName)
+    );
 }
 
 function deferredExecutionOf(aFunction, aContext, aListOfArguments) {
@@ -136,6 +139,16 @@ function executeDeferred(aFunction, aContext, aListOfArguments) {
     aContext,
     aListOfArguments
   );
+}
+
+function dispatchEventToHandler(aEvent, aEventHandler) {
+  if (isAnObjectHandler(aEventHandler)) {
+    aEventHandler.handle(aEvent);
+  }
+
+  if (isAFunctionHandler(aEventHandler)) {
+    aEventHandler(aEvent);
+  }
 }
 
 module.exports = EventBus;
