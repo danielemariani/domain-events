@@ -13,7 +13,7 @@ $ npm install domain-events
 ### Usage
 
 ```js
-const domainEvents = require("domain-events");
+const domainEvents = require('domain-events');
 
 const EventBus = domainEvents.EventBus;
 const DomainEvent = domainEvents.DomainEvent;
@@ -49,27 +49,63 @@ console.log('Other syncrounous code...');
 // --> "[[ANY]] action.happened"
 ```
 
+## Documentation
+
 ### DomainEvent
 Create domain events with the DomainEvent class.
 
-#### constructor(aEventName, /*\*optional\**/ aEventPayload)
+#### constructor(aEventName, /*\*optional\**/ aEventPayload, /*\*optional\**/ aEventCreationTimestamp)
 ```js
 let event = new DomainEvent('event.name');
 let event = new DomainEvent('event.name', { a: 12 });
+let event = new DomainEvent('event.name', { a: 12 }, 1502530224425);
 ```
 
 ##### aEventName
-A string which will be the name of the event (use the same string to register handlers for that event).
+A String which will be the name of the event (use the same string to register handlers for that event).
+Usually, because a domain event represents something that happened in the past, is preferrable to name events with an action in the past tense. Because the event name is just a plain string any naming convention flavour is possible, according to your coding style.
+
+Examples:
+- 'user.created'
+- 'purchaseCompleted'
+- 'ACTION_HAPPENED'
 
 ##### aEventPayload (optional)
 Any serializable value which will be provided to the handlers as the payload of the event. Any value that can be serialized as a JSON string could be provided as the paylod and will have an expected behaviour.
 
 ```js
-Valid values examples:
-- 'A string'
-- 12
-- { a: 23 }
-- null
+// Valid values examples:
+'A string'
+12
+{ a: 23 }
+null
+```
+
+##### aEventCreationTimestamp (optional)
+Newly created domain events are automatically assigned the creation timestamp by the constructor, so it is usually not necessary to provide a specific timestamp. Anyway it is possible to provide a different event creation timestamp to adjust the default behaviour to any particular needs.
+
+#### .name()
+Returns the event name (a String).
+
+#### .payload()
+Returns the (immutable) event payload, or *null* if the event has no payload.
+
+#### .createdAt()
+Returns the event creation timestamp.
+
+#### .serialize()
+Returns a serialized JSON string representing the event. This could be provided to the *static* **DomainEvent.deserialize()** method to restore the original event instance.
+
+#### *static* .deserialize(aSerializedEvent)
+Returns the original instance of the previously serialized event.
+
+##### aSerializedEvent
+A JSON string representing the event, previously created with the **DomainEvent.serialize()** method.
+
+```js
+let event = new DomainEvent('event.name');
+let serializedEvent = event.serialize(); // --> event JSON
+let deserializedEvent = DomainEvent.deserialize(serializedEvent) // --> event
 ```
 
 ### EventBus
@@ -109,7 +145,20 @@ Pass a DomainEvent to the dispatch method to execute the registered handler asyn
 ##### aDomainEvent
 A DomainEvent instance.
 
-#### Events Immutability
+#### static .getInstance()
+Returns a Singleton EventBus instance. The first call actually creates a new EventBus instance while any further call will return the same object. Useful if you don't want to (or can't) inject the eventBus instance wherever it is needed.
+
+```js
+// File1.js
+let eventBus = EventBus.getInstance(); // --> new EventBus();
+eventBus.register(aHandler);
+
+// File2.js
+let eventBus = EventBus.getInstance(); // --> the same event bus instance created in File1.js;
+eventBus.dispatch(aEvent); // The handler registered in File1.js will be called
+```
+
+## Events Immutability
 Every handler will be invoked asyncronously and will be provided the original DomainEvent object, which is immutable.
 For example, mutating the payload in a Handler will not affect the original event and those modifications won't be provided to the next registered Handler.
 
