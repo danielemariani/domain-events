@@ -107,9 +107,11 @@ function dispatchEventToRegisteredHandlers(aEvent) {
 
   function mapHandlerToItsDeferredExecution(aEventHandler) {
     return deferredExecutionOf(
-      dispatchEventToHandler,
-      this,
-      [ aEvent, aEventHandler ]
+      dispatchEventToHandler.bind(
+        this,
+        aEvent,
+        aEventHandler
+      )
     );
   }
 }
@@ -122,23 +124,21 @@ function listAllHandlersForEvent(aEventName) {
     );
 }
 
-function deferredExecutionOf(aFunction, aContext, aListOfArguments) {
+function deferredExecutionOf(aOperation) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(executeDeferred(
-        aFunction,
-        aContext,
-        aListOfArguments
-      ));
+      executeAndIgnoreErrors(aOperation);
+      resolve();
     }, 0);
   });
 }
 
-function executeDeferred(aFunction, aContext, aListOfArguments) {
-  return aFunction.apply(
-    aContext,
-    aListOfArguments
-  );
+function executeAndIgnoreErrors(aOperation) {
+  try {
+    aOperation();
+  } catch (e) {
+    // Ignore errors
+  }
 }
 
 function dispatchEventToHandler(aEvent, aEventHandler) {

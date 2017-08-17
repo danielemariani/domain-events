@@ -158,6 +158,24 @@ describe('EventBus', () => {
             .toHaveBeenCalledWith(aEvent);
         }
       });
+
+      describe('if an error occurs during the execution of the handler', () => {
+        it('should not be propagated to the outer code', () => {
+          const NO_ERRORS_OCCURRED = true;
+
+          eventBus.register(() => {
+            throw new Error('A handler execution error');
+          }, 'EVENT');
+
+          return eventBus.dispatch(aEvent)
+            .then(onDispatchCompleted)
+            .catch(e => { throw e; });
+
+          function onDispatchCompleted() {
+            expect(NO_ERRORS_OCCURRED).toBe(true);
+          }
+        });
+      });
     });
 
     describe('and multiple handlers are registered for the event', () => {

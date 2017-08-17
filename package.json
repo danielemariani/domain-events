@@ -4,7 +4,7 @@
   "description": "A js library to create and asyncronously dispatch Domain Events",
   "main": "src",
   "scripts": {
-    "test": "./node_modules/.bin/jest --watchAll ./src",
+    "test": "./node_modules/.bin/jest ./src --watchAll --coverage",
     "test-travis": "./node_modules/.bin/jest ./src --coverage"
   },
   "author": "Daniele Mariani",
